@@ -3,18 +3,18 @@ package net.maku.controller;/**
  * Date: 2023/9/11
  */
 
+import com.thoughtworks.xstream.XStream;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import net.maku.constant.MessageType;
 import net.maku.constant.WxConfigConstant;
-import org.apache.ibatis.annotations.Mapper;
+import net.maku.moudle.TextMessage;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -89,8 +89,8 @@ public class WxController {
      * @return {@code Map<String, String>}
      */
     @PostMapping("/verify")
-    public Map<String, String> verify(HttpServletRequest request){
-        HashMap<String, String> msgMap = new HashMap<>();
+    public String verify(HttpServletRequest request){
+        Map<String, String> msgMap = new HashMap<>();
         try {
             ServletInputStream inputStream = request.getInputStream();
             // dom4j 用于读取 XML 文件输入流的类
@@ -108,6 +108,28 @@ public class WxController {
             e.printStackTrace();
         }
         System.out.println("收到消息"+msgMap);
-        return msgMap;
+        String replyMessage = getReplyMessage(msgMap);
+        return replyMessage;
+    }
+
+    /**
+     * 获取回复消息内容
+     * @param msgMap
+     * @return {@code String(xml类型)}
+     */
+    private String getReplyMessage(Map<String, String> msgMap) {
+        TextMessage textMessage = new TextMessage();
+        textMessage.setToUserName(msgMap.get("FromUserName"));
+        textMessage.setFromUserName(msgMap.get("ToUserName"));
+        textMessage.setCreateTime(new Date().toString());
+        textMessage.setMsgType(MessageType.TEXT);
+        textMessage.setContent("你好");
+
+        //将对象转换为xml字符串
+        XStream xStream = new XStream();
+        xStream.processAnnotations(TextMessage.class);
+        String xmlStr = xStream.toXML(textMessage);
+        System.out.println(xmlStr);
+        return xmlStr;
     }
 }
