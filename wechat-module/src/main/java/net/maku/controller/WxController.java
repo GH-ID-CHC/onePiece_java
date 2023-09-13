@@ -4,14 +4,17 @@ package net.maku.controller;/**
  */
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import net.maku.constant.WxConfigConstant;
 import org.apache.ibatis.annotations.Mapper;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -78,5 +81,33 @@ public class WxController {
 
         System.out.println("执行==>" + signature);
         return null;
+    }
+
+    /**
+     * 接收用户的普通消息
+     * @param request
+     * @return {@code Map<String, String>}
+     */
+    @PostMapping("/verify")
+    public Map<String, String> verify(HttpServletRequest request){
+        HashMap<String, String> msgMap = new HashMap<>();
+        try {
+            ServletInputStream inputStream = request.getInputStream();
+            // dom4j 用于读取 XML 文件输入流的类
+            SAXReader saxReader = new SAXReader();
+            // 读取 XML 文件输入流, XML 文档对象
+            Document document = saxReader.read(inputStream);
+            // XML 文件的根节点
+            Element root = document.getRootElement();
+            // 所有的子节点
+            List<Element> childrenElement = root.elements();
+            for (Element element : childrenElement) {
+                msgMap.put(element.getName(), element.getStringValue());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("收到消息"+msgMap);
+        return msgMap;
     }
 }
