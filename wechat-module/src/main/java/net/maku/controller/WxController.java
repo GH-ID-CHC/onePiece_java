@@ -9,6 +9,8 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import net.maku.constant.MessageType;
 import net.maku.constant.WxConfigConstant;
+import net.maku.moudle.ArticlesMessage;
+import net.maku.moudle.ItemMessage;
 import net.maku.moudle.TextMessage;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -108,12 +110,44 @@ public class WxController {
             e.printStackTrace();
         }
         System.out.println("收到消息"+msgMap);
-        String replyMessage = getReplyMessage(msgMap);
+        String replyMessage=null;
+        if ("图文".equals(msgMap.get("Content"))){
+            replyMessage=getPictographMessage(msgMap);
+        }else {
+            replyMessage = getReplyMessage(msgMap);
+        }
         return replyMessage;
     }
 
     /**
-     * 获取回复消息内容
+     * 获取回复图文消息内容
+     * @param msgMap
+     * @return {@code String(xml类型)}
+     */
+    private String getPictographMessage(Map<String, String> msgMap) {
+        ArticlesMessage articlesMessage = new ArticlesMessage();
+        articlesMessage.setToUserName(msgMap.get("FromUserName"));
+        articlesMessage.setFromUserName(msgMap.get("ToUserName"));
+        articlesMessage.setCreateTime(new Date().toString());
+        articlesMessage.setMsgType(MessageType.NEWS);
+        articlesMessage.setArticleCount("1");
+        ItemMessage itemMessage = new ItemMessage();
+        itemMessage.setTitle("路飞五档");
+        itemMessage.setDescription("最高顶点！最强形态！");
+        itemMessage.setPicUrl("http://mmbiz.qpic.cn/sz_mmbiz_jpg/XTDxMhlYfPgvlPibZ6JfpOc4AWQfAxGOV2AkowLQniaTbbdHpntMVOPwIce88Ww1FZrJInSiaRc1kdico2TwoDvbFQ/0");
+        itemMessage.setUrl("http://www.onepiece.com");
+        List<ItemMessage> itemMessages = new ArrayList<>();
+        itemMessages.add(itemMessage);
+        articlesMessage.setArticles(itemMessages);
+        XStream xStream = new XStream();
+        xStream.processAnnotations(ArticlesMessage.class);
+        String xmlStr = xStream.toXML(articlesMessage);
+        System.out.println(xmlStr);
+        return xmlStr;
+    }
+
+    /**
+     * 获取回复文本消息内容
      * @param msgMap
      * @return {@code String(xml类型)}
      */
