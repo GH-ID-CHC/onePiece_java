@@ -84,3 +84,13 @@ easy-trans:
   is-enable-global: true
   #启用平铺模式
   is-enable-tile: true
+
+#微信公众号相关配置
+wx:
+  app-id: wxacee4a374359e5a0
+  app-secret: 09f29eefe6fc5d9153da3d2a24f7c4ad
+  token: chai
+  config-storage:
+    type: jedis
+#  app-id: wxacee4a374359e5a0
+#  app-secret: c341e9a5c1b62c4032dacfaab35f36bb

@@ -8,12 +8,37 @@
         <version>3.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>wechat-module</artifactId>
+    <packaging>jar</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--       工具类获取配置文件中值-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.maku</groupId>
+            <artifactId>maku-framework</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- XML 文件读写 -->
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 
+        <!--     微信后端   -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+    </dependencies>
 </project>

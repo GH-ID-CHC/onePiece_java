@@ -20,6 +20,11 @@
             <artifactId>maku-boot-new</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>net.maku</groupId>
+            <artifactId>wechat-module</artifactId>
+            <version>3.4.0</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>net.maku</groupId>-->
 <!--            <artifactId>maku-module-quartz</artifactId>-->
