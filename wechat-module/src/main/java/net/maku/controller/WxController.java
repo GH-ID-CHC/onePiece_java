@@ -191,7 +191,7 @@ public class WxController {
      * @return {@code String}
      * @throws WxErrorException
      */
-    @GetMapping("createMenu")
+    @GetMapping("/createMenu")
     public String createMenu() throws WxErrorException {
         // 创建菜单对象
         WxMenu menu = new WxMenu();
@@ -256,16 +256,16 @@ public class WxController {
      * 网页授权
      * @return {@code String}
      */
-    @GetMapping("buildAuthPage")
+    @GetMapping("/buildAuthPage")
     public String auth() {
         WxOAuth2Service oAuth2Service = wxMpService.getOAuth2Service();
         // 构建授权url
-        return oAuth2Service.buildAuthorizationUrl("http://5j9wcv.natappfree.cc/wx/callback",
+        return oAuth2Service.buildAuthorizationUrl("http://gcf6gj.natappfree.cc/wx/callback",
                 WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
     }
 
 
-    @GetMapping("callback")
+    @GetMapping("/callback")
     public WxOAuth2UserInfo callback(String code) throws WxErrorException {
         WxOAuth2Service oAuth2Service = wxMpService.getOAuth2Service();
         // 利用code获取accessToken

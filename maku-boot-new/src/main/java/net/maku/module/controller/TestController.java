@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping()
-    @Operation(summary = "测试接口")
+    @Operation(summary = "测试接口2")
     public Result<String> test(){
 
         return Result.ok("测试数据");
