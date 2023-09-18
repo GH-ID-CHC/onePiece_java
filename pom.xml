@@ -24,6 +24,7 @@
         <module>maku-framework</module>
         <module>maku-server</module>
         <module>wechat-module</module>
+        <module>qq-module</module>
     </modules>
 
     <properties>
